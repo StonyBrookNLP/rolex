@@ -1,0 +1,9 @@
+,nl,fl,pk_gold
+0,The sr_slotid result MUST equal sa_slotid .,: ALWAYS ( get_result(sr_slotid) == sa_slotid ),
+1,"However, if gdia_maxcount is zero , NFS4ERR_TOOSMALL MUST NOT be returned .",: ALWAYS ( ( gdia_maxcount==0 ) -> NOT ( return ( E ) WITH E . NFS4ERR_TOOSMALL ) ),A is returned=>return ( E ) WITH E . A
+2,"If the source offset or the source offset plus count is greater than the size of the source file , the operation MUST fail with NFS4ERR_INVAL .",: ALWAYS ( ( ( get_offset(source)>get_size(cfh)) OR (get_offset(source)+count>get_size(cfh) ) ) -> ( fail ( E ) WITH E . NFS4ERR_INVAL ) ),fail with A=>fail ( E ) WITH E . A
+3,"If it does not want to support a hole , it MUST use READ .",: ALWAYS ( NOT ( support ( E ) WITh E . server) -> ( READ ( E ) ) ),it=>server<SEP>support A=>support ( E )  WITH E . A<SEP>read=>READ ( E )
+4,The array contents MUST be contiguous in the file .,: ALWAYS ( contiguous ( E ) WITH E . get_contents(arr) WITH E . cfh ),file=>cfh<SEP>array=>arr<SEP>A is contiguous=>contiguous ( E ) WITH E . A
+5,"If a previous filehandle was saved , then it is no longer accessible .",: ALWAYS ( ( save ( E ) WITH E . prev_cfh ) -> NOT ( access ( E ) WITH E . prev_cfh ) ),previous filehandle=>prev_cfh<SEP>A is saved => save ( E ) WITH E . A<SEP>A is accessible => access ( E ) WITH E . A
+6,"If none exist , then NFS4ERR_NOENT will be returned .",: ALWAYS ( NOT ( exist ( E ) WITH E . cfh) -> ( return ( E ) WITH E . NFS4ERR_NOENT ) ),A exists=>exist ( E ) WITH E . A<SEP>A is returned=>return ( E ) WITH E . A<SEP>none => cfh
+7,"If the client specified CDFC4_FORE , the server MUST return CDFS4_FORE .",: ALWAYS ( ( specify ( E ) WITH E . CDFC4_FORE ) -> ( return ( E ) WITH E . CDFS4_FORE ) ),specify A=>specify ( E ) WITH E . A<SEP>return A=>return ( E ) WITH E . A
